@@ -1,5 +1,5 @@
 import Boilerplate from "../Boilerplate/Boilerplate";
-import CodeBlock from "../InputCode/InputCode";
+import CodeBlock from "../InputCode";
 import styles from "./App.module.css";
 import { useState } from "react";
 import Results from "../Results/Results";

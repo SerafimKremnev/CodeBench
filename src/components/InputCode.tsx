@@ -1,7 +1,12 @@
-import {useCallback, useEffect, useState} from "react";
-import styles from "./InputCode.module.css";
-import { worker_script } from "../../worker";
-import { IResults } from "../App/App";
+import { useEffect, useState } from "react";
+import { worker_script } from "../worker";
+import { IResults } from "./App/App";
+import Button from "@mui/material/Button";
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Typography, TextField, Box } from "@mui/material";
+import Editor from "@monaco-editor/react";
 
 interface ICodeBlock {
   name: string;
@@ -21,7 +26,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
 
   useEffect(() => {
     setMyWorker(new Worker(worker_script));
-  }, [])
+  }, []);
 
   const bench = (isTerminate?: boolean) => {
     setIsLoading(true);
@@ -58,14 +63,18 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
       setIsLoading(false);
     };
   };
-
+  // .wrapper {
+  //   width: 49%;
+  //   margin-bottom: 10px;
+  // }
   return (
-    <div className={styles.wrapper}>
+    <Box sx={{ width: "49%", mb: 2 }}>
       {isFocuse ? (
-        <input
-          className={styles.nameInput}
-          type='text'
+        <TextField
+          id='standard-basic'
+          label='Имя поля'
           value={codeName}
+          sx={{ input: { color: "#fff" } }}
           onChange={(e) => {
             setCodeName(e.target.value);
           }}
@@ -74,67 +83,109 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
             setIsFocuse(false);
           }}
           autoFocus
+          variant='standard'
+          size='small'
         />
       ) : (
-        <p
-          className={styles.nameText}
+        <Button
           onClick={() => {
             setIsFocuse(true);
           }}
+          size='large'
         >
           {codeName}
-        </p>
+        </Button>
       )}
+      <Editor
+        height='300px'
+        defaultLanguage='javascript'
+        defaultValue='// some comment'
+        value={code}
+        options={{ tabSize: 2, fontSize: 15 }}
+        onChange={(value) => {
+          setCode(value || "");
+        }}
+        theme='vs-dark'
+      />
 
-      <textarea
+      {/* <textarea
         className={styles.input}
         value={code}
         onChange={(e) => {
           setCode(e.target.value);
         }}
-      />
-      <div className={styles.result}>
-        {errorMessage ? (
-          <p className={styles.error}>{errorMessage}</p>
-        ) : (
-          <p className={styles.resultText}>
-            Время выполнения:
-            {loading ? "Выполняется" : `${resultTime}  ms`}
-          </p>
-        )}
+      /> */}
+      <Box>
+        <Box sx={{ mb: 1 }}>
+          {errorMessage ? (
+            <Typography
+              variant='subtitle1'
+              component='p'
+              color='error'
+              sx={{ width: "100%" }}
+            >
+              {errorMessage}
+            </Typography>
+          ) : (
+            <Typography
+              variant='subtitle1'
+              component='p'
+              color='primary'
+              sx={{ mr: 1 }}
+            >
+              Время выполнения:
+              {loading ? (
+                <CircularProgress sx={{ ml: 1 }} size={15} />
+              ) : (
+                ` ${resultTime}  ms`
+              )}
+            </Typography>
+          )}
+        </Box>
 
         {loading ? (
-          <button
+          <Button
             type='button'
-            className={styles.resultButton}
             onClick={(e) => {
               e.preventDefault();
-
               bench(true);
-              //   setIsLoading(false);
-              //   setErrorMessage("Прервано");
             }}
+            size='small'
+            variant='contained'
+            endIcon={<DeleteIcon fontSize='small' />}
+            color='error'
           >
             Прервать
-          </button>
+          </Button>
         ) : (
-          <button
-            type='button'
+          <Button
             id={name}
-            className={styles.resultButton}
             onClick={(e) => {
               e.preventDefault();
               bench();
             }}
+            variant='contained'
+            size='small'
+            endIcon={<SendIcon fontSize='small' />}
           >
             Выполнить отдельно
-          </button>
+          </Button>
         )}
-        <button className={styles.deleteButton} type='button'>
+        <Button
+          sx={{ ml: 1 }}
+          onClick={(e) => {
+            e.preventDefault();
+            bench(true);
+          }}
+          size='small'
+          variant='outlined'
+          endIcon={<DeleteIcon fontSize='small' />}
+          color='error'
+        >
           Удалить поле
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Box>
   );
 }
 
