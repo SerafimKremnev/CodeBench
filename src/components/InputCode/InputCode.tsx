@@ -23,24 +23,25 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
     setMyWorker(new Worker(worker_script));
   }, [])
 
-  const bench = (worker: Worker | undefined, isTerminate?: boolean) => {
+  const bench = (isTerminate?: boolean) => {
     setIsLoading(true);
     setErrorMessage("");
     // const myWorkerObj = new Worker(worker_script);
-    if (!worker) return;
-    console.log(worker);
+    if (!myWorker) return;
+    console.log(myWorker);
 
     if (isTerminate) {
       setIsLoading(false);
       setErrorMessage("Прервано");
-      worker.terminate();
+      myWorker.terminate();
+      setMyWorker(new Worker(worker_script));
       return;
     }
 
-    worker.postMessage(code);
+    myWorker.postMessage(code);
     // myWorker.postMessage(code, [code]);
 
-    worker.onmessage = (m) => {
+    myWorker.onmessage = (m) => {
       setResultTime(m.data);
       setResults((prevState: IResults[]) =>
         prevState.map((item) =>
@@ -51,7 +52,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
       setIsLoading(false);
       //   myWorker.terminate();
     };
-    worker.onerror = (event) => {
+    myWorker.onerror = (event) => {
       //   myWorker.terminate();
       setErrorMessage(event.message);
       setIsLoading(false);
@@ -109,7 +110,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
             onClick={(e) => {
               e.preventDefault();
 
-              bench(myWorker, true);
+              bench(true);
               //   setIsLoading(false);
               //   setErrorMessage("Прервано");
             }}
@@ -123,7 +124,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
             className={styles.resultButton}
             onClick={(e) => {
               e.preventDefault();
-              bench(myWorker);
+              bench();
             }}
           >
             Выполнить отдельно

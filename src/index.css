@@ -10,6 +10,11 @@ button {
   outline: none;
   border: none;
 }
+
+a {
+  text-decoration: none;
+  color: #ffffff;
+}
 button {
   background-color: rgb(47, 47, 147);
   cursor: pointer;
@@ -20,4 +25,8 @@ button {
 }
 button:hover {
   background-color: rgb(17, 17, 244);
+}
+
+.active {
+  color: rgb(47, 47, 147);
 }

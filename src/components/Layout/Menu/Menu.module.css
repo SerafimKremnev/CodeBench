@@ -1,0 +1,10 @@
+.menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+.link {
+    font-size: 18px;
+    font-weight: 600;
+}
