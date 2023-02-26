@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import styles from "./InputCode.module.css";
 import { worker_script } from "../../worker";
 import { IResults } from "../App/App";
@@ -19,25 +19,28 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
   const [errorMessage, setErrorMessage] = useState("");
   const [myWorker, setMyWorker] = useState<Worker>();
 
-  const bench = (isTerminate?: boolean) => {
+  useEffect(() => {
+    setMyWorker(new Worker(worker_script));
+  }, [])
+
+  const bench = (worker: Worker | undefined, isTerminate?: boolean) => {
     setIsLoading(true);
     setErrorMessage("");
     // const myWorkerObj = new Worker(worker_script);
-    setMyWorker(new Worker(worker_script));
-    if (!myWorker) return;
-    console.log(myWorker);
+    if (!worker) return;
+    console.log(worker);
 
     if (isTerminate) {
       setIsLoading(false);
       setErrorMessage("Прервано");
-      myWorker.terminate();
+      worker.terminate();
       return;
     }
 
-    myWorker.postMessage(code);
+    worker.postMessage(code);
     // myWorker.postMessage(code, [code]);
 
-    myWorker.onmessage = (m) => {
+    worker.onmessage = (m) => {
       setResultTime(m.data);
       setResults((prevState: IResults[]) =>
         prevState.map((item) =>
@@ -48,7 +51,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
       setIsLoading(false);
       //   myWorker.terminate();
     };
-    myWorker.onerror = (event) => {
+    worker.onerror = (event) => {
       //   myWorker.terminate();
       setErrorMessage(event.message);
       setIsLoading(false);
@@ -106,7 +109,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
             onClick={(e) => {
               e.preventDefault();
 
-              bench(true);
+              bench(myWorker, true);
               //   setIsLoading(false);
               //   setErrorMessage("Прервано");
             }}
@@ -120,7 +123,7 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
             className={styles.resultButton}
             onClick={(e) => {
               e.preventDefault();
-              bench();
+              bench(myWorker);
             }}
           >
             Выполнить отдельно
