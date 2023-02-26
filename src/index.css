@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+input,
+textarea,
+button {
+  outline: none;
+  border: none;
+}
+button {
+  background-color: rgb(47, 47, 147);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  color: #fff;
+  transition: all 0.3s;
+}
+button:hover {
+  background-color: rgb(17, 17, 244);
+}
