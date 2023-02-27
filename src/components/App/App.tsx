@@ -38,6 +38,7 @@ function App() {
               key={codeBlock.name + index}
               name={codeBlock.name}
               time={codeBlock.time}
+              results={results}
               setResults={setResults}
               index={index}
             />
