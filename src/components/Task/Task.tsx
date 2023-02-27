@@ -1,17 +1,19 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import styles from './Task.module.css'
 import {Link} from "react-router-dom";
 
-const Task = () => {
+interface TaskProps {
+    name: string,
+    children: ReactNode,
+    id: number
+}
+const Task = ({children, name, id}: TaskProps) => {
+
     return (
         <div className={styles.task}>
-            <Link to={'/task/12345'}>Название задачи</Link>
+            <Link className={styles.link} to={`/tasks/${id}`}>{name}</Link>
             <p className={styles.description}>
-                Описание задачи
-                Описание задачи
-                Описание задачи
-                Описание задачи
-                Описание задачи
+                {children}
             </p>
         </div>
     );
