@@ -12,13 +12,13 @@ interface ICodeBlock {
   name: string;
   time: number;
   index: number;
+  results: IResults[];
   setResults: (item: any) => void;
 }
 
-function CodeBlock({ name, setResults, index }: ICodeBlock) {
+function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
   const [code, setCode] = useState("for (let i = 0; i < 10000000; i++);");
   const [codeName, setCodeName] = useState(name);
-  const [isFocuse, setIsFocuse] = useState(false);
   const [resultTime, setResultTime] = useState(0);
   const [loading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -26,14 +26,16 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
 
   useEffect(() => {
     setMyWorker(new Worker(worker_script));
+    return () => {
+      myWorker?.terminate();
+    };
   }, []);
 
   const bench = (isTerminate?: boolean) => {
     setIsLoading(true);
     setErrorMessage("");
-    // const myWorkerObj = new Worker(worker_script);
+
     if (!myWorker) return;
-    console.log(myWorker);
 
     if (isTerminate) {
       setIsLoading(false);
@@ -44,7 +46,6 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
     }
 
     myWorker.postMessage(code);
-    // myWorker.postMessage(code, [code]);
 
     myWorker.onmessage = (m) => {
       setResultTime(m.data);
@@ -55,66 +56,61 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
       );
 
       setIsLoading(false);
-      //   myWorker.terminate();
     };
     myWorker.onerror = (event) => {
-      //   myWorker.terminate();
       setErrorMessage(event.message);
       setIsLoading(false);
     };
   };
-  // .wrapper {
-  //   width: 49%;
-  //   margin-bottom: 10px;
-  // }
+
+  const deleteField = () => {
+    const copyResults = [...results];
+    copyResults.splice(index, 1);
+
+    setResults(copyResults);
+  };
+
   return (
     <Box sx={{ width: "49%", mb: 2 }}>
-      {isFocuse ? (
-        <TextField
-          id='standard-basic'
-          label='Имя поля'
-          value={codeName}
-          sx={{ input: { color: "#fff" } }}
-          onChange={(e) => {
-            setCodeName(e.target.value);
-          }}
-          onBlur={() => {
-            if (!codeName) setCodeName("Имя решения");
-            setIsFocuse(false);
-          }}
-          autoFocus
-          variant='standard'
-          size='small'
-        />
-      ) : (
-        <Button
-          onClick={() => {
-            setIsFocuse(true);
-          }}
-          size='large'
-        >
-          {codeName}
-        </Button>
-      )}
-      <Editor
-        height='300px'
-        defaultLanguage='javascript'
-        defaultValue='// some comment'
-        value={code}
-        options={{ tabSize: 2, fontSize: 15 }}
-        onChange={(value) => {
-          setCode(value || "");
+      <TextField
+        value={codeName}
+        sx={{
+          input: { color: "#fff" },
+          mb: 1,
         }}
-        theme='vs-dark'
+        onChange={(e) => {
+          setCodeName(e.target.value);
+        }}
+        onBlur={() => {
+          if (!codeName) setCodeName("Имя решения");
+        }}
+        size='small'
+        id='outlined-basic'
+        label='Имя поля'
+        variant='outlined'
+        focused
       />
 
-      {/* <textarea
-        className={styles.input}
-        value={code}
-        onChange={(e) => {
-          setCode(e.target.value);
-        }}
-      /> */}
+      <Box sx={{ borderRadius: 2, overflow: "hidden" }}>
+        <Editor
+          height='300px'
+          defaultLanguage='javascript'
+          defaultValue='// code here'
+          value={code}
+          options={{
+            tabSize: 2,
+            fontSize: 15,
+            minimap: {
+              enabled: false,
+            },
+          }}
+          onChange={(value) => {
+            setCode(value || "");
+          }}
+          theme='vs-dark'
+        />
+      </Box>
+
       <Box>
         <Box sx={{ mb: 1 }}>
           {errorMessage ? (
@@ -175,10 +171,10 @@ function CodeBlock({ name, setResults, index }: ICodeBlock) {
           sx={{ ml: 1 }}
           onClick={(e) => {
             e.preventDefault();
-            bench(true);
+            deleteField();
           }}
           size='small'
-          variant='outlined'
+          variant='contained'
           endIcon={<DeleteIcon fontSize='small' />}
           color='error'
         >
