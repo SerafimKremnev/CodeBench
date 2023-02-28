@@ -1,3 +1,40 @@
 .taskPage {
-    min-height: 100vh;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    grid-template-areas:
+        "name editor"
+        "group editor"
+        "desc editor"
+        "desc test"
+        "buttons buttons"
+    ;
+    grid-template-rows: auto auto 1.3fr 1fr auto;
+    height: 100%;
+    gap: 15px;
+}
+
+.group {
+    grid-area: group;
+}
+.desc {
+    grid-area: desc;
+}
+
+.name {
+    grid-area: name;
+}
+.test {
+    grid-area: test;
+}
+
+.code {
+    grid-area: editor;
+}
+
+.buttons {
+    grid-area: buttons;
+    display: flex;
+    gap: 20px;
+    justify-content: right;
 }

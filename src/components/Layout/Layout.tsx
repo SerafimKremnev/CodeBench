@@ -9,7 +9,9 @@ const Layout = () => {
         <div className={styles.wrapper}>
             <Header/>
             <Menu/>
-            <Outlet/>
+            <div className={styles.body}>
+                <Outlet/>
+            </div>
         </div>
     );
 };
