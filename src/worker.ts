@@ -11,12 +11,19 @@ const workercode = () => {
     }
     const start = performance.now();
 
-    for (let i = 0; i <= COUNT_TESTS; i++) {
+    let score = 0;
+    let need = Date.now() + 1000;
+    while (Date.now() < need) {
       func();
+      score++;
     }
+    // for (let i = 0; i <= COUNT_TESTS; i++) {
+    //   func();
+    // }
 
     const end = performance.now();
-    self.postMessage((end - start) / COUNT_TESTS);
+    // self.postMessage((end - start) / COUNT_TESTS);
+    self.postMessage(score);
   };
 };
 

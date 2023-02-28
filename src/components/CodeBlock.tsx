@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { worker_script } from "../worker";
-import { IResults } from "./App/App";
-
 import { Send, Delete } from "@mui/icons-material";
 import {
   Typography,
@@ -11,16 +9,15 @@ import {
   CircularProgress,
 } from "@mui/material";
 import Editor from "@monaco-editor/react";
+import { observer } from "mobx-react-lite";
+import BenchState from "../store/BenchState";
 
 interface ICodeBlock {
   name: string;
-  time: number;
   index: number;
-  results: IResults[];
-  setResults: (item: any) => void;
 }
 
-function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
+const CodeBlock = observer(({ name, index }: ICodeBlock) => {
   const [code, setCode] = useState("for (let i = 0; i < 10000000; i++);");
   const [codeName, setCodeName] = useState(name);
   const [resultTime, setResultTime] = useState(0);
@@ -53,11 +50,7 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
 
     myWorker.onmessage = (m) => {
       setResultTime(m.data);
-      setResults((prevState: IResults[]) =>
-        prevState.map((item) =>
-          item.name === codeName ? { ...item, time: m.data } : item
-        )
-      );
+      BenchState.setScore(index, m.data);
 
       setIsLoading(false);
     };
@@ -65,13 +58,6 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
       setErrorMessage(event.message);
       setIsLoading(false);
     };
-  };
-
-  const deleteField = () => {
-    const copyResults = [...results];
-    copyResults.splice(index, 1);
-
-    setResults(copyResults);
   };
 
   return (
@@ -175,7 +161,7 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
           sx={{ ml: 1 }}
           onClick={(e) => {
             e.preventDefault();
-            deleteField();
+            BenchState.deleteField(index);
           }}
           size='small'
           variant='contained'
@@ -187,6 +173,6 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
       </Box>
     </Box>
   );
-}
+});
 
 export default CodeBlock;
