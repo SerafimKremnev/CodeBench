@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { worker_script } from "../worker";
 import { IResults } from "./App/App";
-import Button from "@mui/material/Button";
-import SendIcon from "@mui/icons-material/Send";
-import DeleteIcon from "@mui/icons-material/Delete";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Typography, TextField, Box } from "@mui/material";
+
+import { Send, Delete } from "@mui/icons-material";
+import {
+  Typography,
+  TextField,
+  Box,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import Editor from "@monaco-editor/react";
 
 interface ICodeBlock {
@@ -148,7 +152,7 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
             }}
             size='small'
             variant='contained'
-            endIcon={<DeleteIcon fontSize='small' />}
+            endIcon={<Delete fontSize='small' />}
             color='error'
           >
             Прервать
@@ -162,7 +166,7 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
             }}
             variant='contained'
             size='small'
-            endIcon={<SendIcon fontSize='small' />}
+            endIcon={<Send fontSize='small' />}
           >
             Выполнить отдельно
           </Button>
@@ -175,7 +179,7 @@ function CodeBlock({ name, setResults, index, results }: ICodeBlock) {
           }}
           size='small'
           variant='contained'
-          endIcon={<DeleteIcon fontSize='small' />}
+          endIcon={<Delete fontSize='small' />}
           color='error'
         >
           Удалить поле
