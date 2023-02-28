@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 interface TaskProps {
     name: string,
     children: ReactNode,
-    id: number
+    id: string
 }
 const Task = ({children, name, id}: TaskProps) => {
 

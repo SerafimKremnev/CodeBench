@@ -6,7 +6,7 @@
         "name editor"
         "group editor"
         "desc editor"
-        "desc test"
+        "desc editor"
         "buttons buttons"
     ;
     grid-template-rows: auto auto 1.3fr 1fr auto;
@@ -23,9 +23,6 @@
 
 .name {
     grid-area: name;
-}
-.test {
-    grid-area: test;
 }
 
 .code {

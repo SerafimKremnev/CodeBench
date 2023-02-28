@@ -1,8 +1,8 @@
 import {createBrowserRouter, createRoutesFromElements, Route, Router} from "react-router-dom";
-import App from "./src/components/App/App";
-import Layout from "./src/components/Layout/Layout";
-import Tasks from "./src/pages/Tasks/Tasks";
-import TaskPage from "./src/pages/TaskPage/TaskPage";
+import App from "./components/App/App";
+import Layout from "./components/Layout/Layout";
+import Tasks from "./pages/Tasks/Tasks";
+import TaskPage from "./pages/TaskPage/TaskPage";
 
 export const router = createBrowserRouter(createRoutesFromElements(
         <Route path="/" element={<Layout/>}>
