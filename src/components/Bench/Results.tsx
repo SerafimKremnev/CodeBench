@@ -1,38 +1,13 @@
-// import styles from "./Results.module.css";
-
 import { observer } from "mobx-react-lite";
 import BenchState from "../../store/BenchState";
-// import { Box, Typography } from "@mui/material";
-
-// const Results = observer(() => {
-//   return (
-//     <Box>
-//       <Typography variant='h6' component='p'>
-//         Результаты выполнения:
-//       </Typography>
-//       {BenchState.getFields().map((result) => {
-//         return (
-//           !!result.score && (
-//             <Typography key={result.name} variant='h6' component='p'>
-//               name: {result.name} time: {result.score}
-//             </Typography>
-//           )
-//         );
-//       })}
-//     </Box>
-//   );
-// });
-
-// export default Results;
-
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Box } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 
 function createData(name: string, score: number) {
   return { name, score };

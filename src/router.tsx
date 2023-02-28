@@ -4,7 +4,7 @@ import {
   Route,
   Router,
 } from "react-router-dom";
-import App from "./components/App";
+import App from "./components/Bench/App";
 import Layout from "./components/Layout/Layout";
 import Tasks from "./pages/Tasks/Tasks";
 import TaskPage from "./pages/TaskPage/TaskPage";

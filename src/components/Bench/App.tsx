@@ -1,8 +1,8 @@
-import Boilerplate from "./Boilerplate/Boilerplate";
+import Boilerplate from "./Boilerplate";
 import CodeBlock from "./CodeBlock";
-import Results from "./Results/Results";
+import Results from "./Results";
 import { observer } from "mobx-react-lite";
-import BenchState from "../store/BenchState";
+import BenchState from "../../store/BenchState";
 import { Box, Typography, Button } from "@mui/material";
 import { Send, AddCircleSharp } from "@mui/icons-material";
 
