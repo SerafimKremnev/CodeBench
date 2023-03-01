@@ -17,17 +17,18 @@ const Tasks = observer(() => {
 
     const [code, setCode] = useState<string>("function pow(a, n) {\r\n     \r\n}")
     const [errorMessage, setErrorMessage] = useState<string>('')
-    const [message, setMessage] = useState<string>('')
-    const [console, setConsole] = useState<boolean>(false)
+    const [message, setMessage] = useState<{ result: string, score: number }>({result: '', score: 0})
+    const [consoleMessage, setConsoleMessage] = useState<boolean>(false)
 
     const sendResults = () => {
         worker.postMessage(code);
         worker.onmessage = (m) => {
             setErrorMessage('')
             setMessage(m.data)
+            console.log(message)
         };
         worker.onerror = (event) => {
-            setMessage('')
+            setMessage({result: '', score: 0})
             setErrorMessage(event.message)
         };
     }
@@ -35,9 +36,9 @@ const Tasks = observer(() => {
     return (
         <div className={styles.taskPage}>
             <TaskName className={styles.name}>{currentTask?.name}</TaskName>
-            <ConsoleBox console={console} setConsole={setConsole} message={message} errorMessage={errorMessage} description={currentTask?.description} classNameButtons={styles.group} classNameDesc={styles.desc}/>
+            <ConsoleBox console={consoleMessage} setConsole={setConsoleMessage} message={message} errorMessage={errorMessage} description={currentTask?.description} classNameButtons={styles.group} classNameDesc={styles.desc}/>
             <EditorBox code={code} setCode={setCode} className={styles.code}/>
-            <Buttons setConsole={setConsole} onClickSend={sendResults} className={styles.buttons}/>
+            <Buttons setConsole={setConsoleMessage} onClickSend={sendResults} className={styles.buttons}/>
         </div>
     );
 });
