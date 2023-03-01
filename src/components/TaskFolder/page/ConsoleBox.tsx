@@ -47,8 +47,9 @@ const ConsoleBox = ({description, classNameButtons, classNameDesc, message, erro
                                 variant='subtitle1'
                                 component='p'
                                 color='green'
+                                fontSize={'15px'}
                                 sx={{ mr: 1 }}>
-                                    Время выполнения скрипта pow(2, 100000): {message.score} ms
+                                    Время выполнения скрипта c высокими значениями: {message.score} ms
                             </Typography>
                         </> :
                         <Typography

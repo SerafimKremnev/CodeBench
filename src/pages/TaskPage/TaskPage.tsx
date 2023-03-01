@@ -15,13 +15,19 @@ const Tasks = observer(() => {
     const currentTask = tasks.tasks.find(e => e.id == id)
     const worker = new Worker(taskWorker_script)
 
-    const [code, setCode] = useState<string>("function pow(a, n) {\r\n     \r\n}")
+    const [code, setCode] = useState<string>(currentTask?.defaultFunc|| '')
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [message, setMessage] = useState<{ result: string, score: number }>({result: '', score: 0})
     const [consoleMessage, setConsoleMessage] = useState<boolean>(false)
 
     const sendResults = () => {
-        worker.postMessage(code);
+        if(currentTask) {
+            worker.postMessage({
+                code: code,
+                args: JSON.stringify(currentTask.speedArgs),
+                test:  JSON.stringify(currentTask.tests)
+            });
+        }
         worker.onmessage = (m) => {
             setErrorMessage('')
             setMessage(m.data)
