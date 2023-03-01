@@ -3,6 +3,7 @@ const taskWorker = (): void => {
         let func = new Function(`return ${e.data.code}`)
         let test = func();
         const testData = JSON.parse(e.data.test)
+        console.log(test)
         let result;
         console.log(e)
         if( test(...testData[0].args) === testData[0].expected &&

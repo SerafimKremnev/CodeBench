@@ -5,7 +5,7 @@ import tasks from '../../../store/TasksState'
 const TaskList = (): JSX.Element => {
     return (
         <div className={styles.taskList}>
-            {tasks.tasks.map(e => <Task id={e.id} name={e.name}>Напишите функци возведения в степень</Task>)}
+            {tasks.tasks.map(e => <Task id={e.id} name={e.name}>{e.description}</Task>)}
         </div>
     )
 

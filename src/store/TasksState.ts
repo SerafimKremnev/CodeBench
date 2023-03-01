@@ -37,6 +37,28 @@ class Tasks {
             ],
             completed: false,
             speedArgs: [2, 1000000]
+        },
+        {
+            id: '1537891',
+            name: 'Самый маленький и большой',
+            defaultFunc: "function highAndLow(numbers) {\r\n     \r\n} \n\n//highAndLow('1 2 3 4 5') return '5 1'",
+            description: 'Вам дается строка чисел, разделенных пробелами, и вы должны вернуть наибольшее и наименьшее число.',
+            tests: [
+                {
+                    args: ['1 2 3 4 5'],
+                    expected: '5 1'
+                },
+                {
+                    args: ["1 2 -3 4 5"],
+                    expected: "5 -3"
+                },
+                {
+                    args: ["1 9 3 4 -5"],
+                    expected: "9 -5"
+                },
+            ],
+            completed: false,
+            speedArgs: ["1123 7 35 1 3284 -15 384 126 387 11 -231 7234 231 -3 483 82374 2 8 8 22 343 23"]
         }
     ]
 
