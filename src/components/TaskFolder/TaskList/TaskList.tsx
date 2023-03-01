@@ -1,7 +1,7 @@
 import React from 'react';
 import Task from "../Task/Task";
 import styles from './TaskList.module.css'
-import tasks from '../../store/TasksState'
+import tasks from '../../../store/TasksState'
 const TaskList = (): JSX.Element => {
     return (
         <div className={styles.taskList}>

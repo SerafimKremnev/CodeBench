@@ -8,7 +8,6 @@ interface Task {
 }
 
 class Tasks {
-
     tasks: Task[] = [
         {id: '2546314', name: 'Функция возведения в степень', description: 'Напишите функцию которая возвращает первый аргумент в степени второго аргумента', test: 'function test()'}
     ]
