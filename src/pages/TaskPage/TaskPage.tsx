@@ -11,6 +11,7 @@ import myAxios from "../../myAxios";
 import {ITaskFinally} from "../../components/TaskFolder/TaskList/TaskList";
 import axios, {AxiosError} from "axios";
 import userState, {IUser} from "../../store/UserState";
+import {Box, CircularProgress} from "@mui/material";
 
 interface IMessage {
     message: string,
@@ -31,6 +32,8 @@ const Tasks = observer(() => {
     const [consoleMessage, setConsoleMessage] = useState<boolean>(false)
     const [passTask, setPassTask] = useState<boolean>(false)
     const [user, setUser] = useState<IUser>();
+    const [loading, setLoading] = useState<boolean>();
+    const [testLoading, setTestLoading] = useState<boolean>(false);
     const navigate = useNavigate()
     const getUser = async () => {
         const {data} = await myAxios.get('/auth/me', {
@@ -46,12 +49,15 @@ const Tasks = observer(() => {
     }, [])
 
     const getTask = async () => {
+        setLoading(true)
         const {data} = await myAxios.get<ITaskFinally>(`/tasks/${id}`);
         setCurrentTask(data)
         setCode(data.defaultFunction)
+        setLoading(false)
     }
     const testResults = async () => {
         try {
+            setTestLoading(true)
             const {data} = await myAxios<IMessage>({
                 method: 'post',
                 data: {
@@ -59,6 +65,7 @@ const Tasks = observer(() => {
                 },
                 url: `/tasks/check/${id}`
             })
+            setTestLoading(false)
             if(!data.error) {
                 setMessage({score: data.score, message: data.message})
                 setPassTask(true)
@@ -69,6 +76,7 @@ const Tasks = observer(() => {
             }
 
         } catch (e: AxiosError<IError> | unknown) {
+            setTestLoading(false)
             if(axios.isAxiosError(e)) {
                 if(e.response) {
                     setErrorMessage(e.response.data.error)
@@ -99,9 +107,13 @@ const Tasks = observer(() => {
 
     }
     return (
+        loading ?
+        <Box display={'flex'} height={'100%'} justifyContent={'center'} alignItems={'center'}>
+            <CircularProgress size={60}/>
+        </Box> :
         <div className={styles.taskPage}>
             <TaskName className={styles.name}>{currentTask?.name}</TaskName>
-            <ConsoleBox console={consoleMessage} setConsole={setConsoleMessage} message={message} errorMessage={errorMessage} description={currentTask?.description} classNameButtons={styles.group} classNameDesc={styles.desc}/>
+            <ConsoleBox loading={testLoading} console={consoleMessage} setConsole={setConsoleMessage} message={message} errorMessage={errorMessage} description={currentTask?.description} classNameButtons={styles.group} classNameDesc={styles.desc}/>
             <EditorBox code={code} setCode={setCode} className={styles.code}/>
             <Buttons message={sendMessage} sendResults={sendResults} passTask={passTask} setConsole={setConsoleMessage} onClickSend={testResults} className={styles.buttons}/>
         </div>

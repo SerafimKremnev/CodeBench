@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Avatar, Box, Button, TextField, Typography} from "@mui/material";
+import {Avatar, Box, Button, CircularProgress, TextField, Typography} from "@mui/material";
 import {useForm} from "react-hook-form";
 import myAxios from "../../../myAxios";
 import {useNavigate} from "react-router-dom";
@@ -23,6 +23,7 @@ interface ErrorMessage {
 const Auth = observer(({type}: AuthProps) => {
     const {register, handleSubmit} = useForm();
     const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>();
     const navigate = useNavigate()
     const check = () => {
         return type === 'reg'
@@ -32,25 +33,30 @@ const Auth = observer(({type}: AuthProps) => {
         try {
             //ЕСЛИ РЕГИСТРАЦИЯ
             if(check()) {
+                setLoading(true)
                 const {data} = await myAxios.post('/auth/register', {
                     login: formData.login,
                     password: formData.password,
                 })
                 localStorage.setItem('token', JSON.stringify(data.token))
+                setLoading(false)
                 UserState.getToken(data.token)
                 navigate('/profile/me')
                 return data
             }
             //ЕСЛИ АВТОРИЗАЦИЯ
+            setLoading(true)
             const {data} = await myAxios.post('/auth/login', {
                 login: formData.login,
                 password: formData.password,
             })
             localStorage.setItem('token', JSON.stringify(data.token))
+            setLoading(false)
             UserState.getToken(data.token)
             navigate('/profile/me')
             return data
         } catch (e: unknown) {
+            setLoading(false)
             if(axios.isAxiosError(e)) {
                 if(e.response) {
                     console.log(e)
@@ -85,6 +91,13 @@ const Auth = observer(({type}: AuthProps) => {
                 <TextField required {...register('passwordCheck')} fullWidth size={'small'} sx={{input: {color:'#fff'}}} focused label={'Подтвердите пароль'} type={'password'} variant={'outlined'}/>
                 {error && <Typography fontSize={12} color={'error'}>{error}</Typography>}
                 <Button onSubmit={handleSubmit(onSubmit)} type={'submit'} fullWidth size={'large'} variant={"contained"} color={'primary'}>Зарегестрироваться</Button>
+                {loading ?
+                    <Box display={'flex'} mt={1} justifyContent={'center'}>
+                        <CircularProgress size={20}/>
+                    </Box>
+                    : <></>
+                }
+
             </form>
         )
     }
@@ -95,6 +108,12 @@ const Auth = observer(({type}: AuthProps) => {
             <TextField {...register('password')}fullWidth size={'small'} sx={{input: {color:'#fff'}}} focused label={'Пароль'} type={'password'} variant={'outlined'}/>
             {error && <Typography fontSize={12} color={'error'}>{error}</Typography>}
             <Button onSubmit={handleSubmit(onSubmit)} type={'submit'} fullWidth size={'large'} variant={"contained"} color={'primary'}>Войти</Button>
+            {loading ?
+                <Box display={'flex'} justifyContent={'center'}>
+                    <CircularProgress size={20}/>
+                </Box>
+                : <></>
+            }
         </form>
     );
 });

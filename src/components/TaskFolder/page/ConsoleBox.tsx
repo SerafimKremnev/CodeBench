@@ -1,5 +1,5 @@
 import React, {DetailedHTMLProps, HTMLAttributes, useState} from 'react';
-import {Box, Button, ButtonGroup, Typography} from "@mui/material";
+import {Box, Button, ButtonGroup, CircularProgress, Typography} from "@mui/material";
 interface ConsoleBoxProps {
     description: string | undefined,
     classNameButtons: string,
@@ -8,9 +8,10 @@ interface ConsoleBoxProps {
     errorMessage: string
     console: boolean,
     setConsole: (isOpen: boolean) => void
+    loading: boolean
 }
 
-const ConsoleBox = ({description, classNameButtons, classNameDesc, message, errorMessage, console, setConsole}: ConsoleBoxProps) => {
+const ConsoleBox = ({description, classNameButtons, classNameDesc, message, errorMessage, console, setConsole, loading}: ConsoleBoxProps) => {
     return (
         <>
             <ButtonGroup size={'small'} className={classNameButtons} variant="outlined" aria-label="outlined button group">
@@ -34,30 +35,34 @@ const ConsoleBox = ({description, classNameButtons, classNameDesc, message, erro
                     color='gray'
                     sx={{ mr: 1 }}
                 >
-                    {message.message ?
-                        <>
-                            <Typography
-                                variant='subtitle1'
-                                component='p'
-                                color='green'
-                                sx={{ mr: 1 }}>
+                    {loading ?
+                        <Box display={'flex'} height={'100%'} justifyContent={'center'} mt={5}>
+                            <CircularProgress/>
+                        </Box> :
+                        (message.message ?
+                            <>
+                                <Typography
+                                    variant='subtitle1'
+                                    component='p'
+                                    color='green'
+                                    sx={{mr: 1}}>
                                     {message.message}
-                            </Typography>
+                                </Typography>
+                                <Typography
+                                    variant='subtitle1'
+                                    component='p'
+                                    color='green'
+                                    fontSize={'15px'}
+                                    sx={{mr: 1}}>
+                                    Очки цикла: {message.score}
+                                </Typography>
+                            </> :
                             <Typography
                                 variant='subtitle1'
                                 component='p'
-                                color='green'
-                                fontSize={'15px'}
-                                sx={{ mr: 1 }}>
-                                    Очки цикла: {message.score}
-                            </Typography>
-                        </> :
-                        <Typography
-                            variant='subtitle1'
-                            component='p'
-                            color='error'
-                            sx={{ mr: 1 }}
-                        >{errorMessage}</Typography>}
+                                color='error'
+                                sx={{mr: 1}}
+                            >{errorMessage}</Typography>)}
                 </Typography>
             </Box>
         </>

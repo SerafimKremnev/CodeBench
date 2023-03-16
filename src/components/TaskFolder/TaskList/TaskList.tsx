@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Task from "../Task/Task";
 import styles from './TaskList.module.css'
 import TasksState from '../../../store/TasksState'
-import {Box, Button, Modal, TextField, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Modal, Skeleton, TextField, Typography} from "@mui/material";
 import UserState, {IUser} from "../../../store/UserState";
 import myAxios from "../../../myAxios";
 import EditorWindow from "../../EditorWindow";
@@ -17,6 +17,8 @@ const TaskList = observer((): JSX.Element => {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [loading, setLoading] = useState<boolean>(false)
+    const arr = new Array(10).fill(<></>)
 
     const getUser = async () => {
         const {data} = await myAxios.get('/auth/me', {
@@ -29,7 +31,9 @@ const TaskList = observer((): JSX.Element => {
 
 
     const getTasks = async () => {
+        setLoading(true)
         const {data} = await myAxios.get('/tasks')
+        setLoading(false)
         TasksState.getTasks(data)
     }
 
@@ -65,14 +69,18 @@ const TaskList = observer((): JSX.Element => {
 
     return (
         <>
-            <div className={styles.taskList}>
-                {user?.isAdmin &&
-                    <>
-                      <Button onClick={handleOpen}>Добавить задачу</Button>
-                      <Modal
-                        open={open}
-                        onClose={handleClose}
-                      >
+            { loading ?
+                <Box display={'flex'} height={'100%'} justifyContent={'center'} alignItems={'center'}>
+                    <CircularProgress size={60}/>
+                </Box> :
+                <div className={styles.taskList}>
+                    {user?.isAdmin &&
+                      <>
+                        <Button onClick={handleOpen}>Добавить задачу</Button>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                        >
                           <form onSubmit={handleSubmit(onSubmit)} style={{padding: '20px', maxWidth: '500px', margin: "50px auto 0", display: 'grid', gridTemplateColumns: '1fr', gap: '10px',background: '#3d3d3d'}}>
                             <Typography fontSize={'22px'} textAlign={'center'} color={'white'}>Добавить задачу</Typography>
                             <TextField {...register('name')} size={'small'} type={'text'} sx={{input: {color:'#fff'}}} focused label={'Название задачи'} variant={'outlined'}/>
@@ -83,10 +91,11 @@ const TaskList = observer((): JSX.Element => {
                             <TextField {...register('speedTest')} size={'small'} type={'text'} sx={{input: {color:'#fff'}}} focused label={'Аргументы для проверки скорости'} variant={'outlined'}/>
                             <Button onSubmit={handleSubmit(onSubmit)} type={'submit'} variant={'contained'}>Добавить задачу</Button>
                           </form>
-                      </Modal>
-                    </>}
-                {TasksState.tasks.map(e => <Task id={e._id} name={e.name}>{e.description}</Task>)}
-            </div>
+                        </Modal>
+                      </>}
+                    {TasksState.tasks.map(e => <Task id={e._id} name={e.name}>{e.description}</Task>)}
+                </div>
+            }
         </>
     )
 

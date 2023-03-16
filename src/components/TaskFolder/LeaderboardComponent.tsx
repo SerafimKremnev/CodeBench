@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
-import {Box, Typography} from "@mui/material";
+import {Box, CircularProgress, Typography} from "@mui/material";
 import myAxios from "../../myAxios";
 import {ITaskFinally, ITaskUsers} from "./TaskList/TaskList";
 import UserBlock from "./UserBlock/UserBlock";
@@ -22,6 +22,7 @@ const LeaderboardComponent = () => {
     const [currentTask, setCurrentTask] = useState<ITaskUsers[]>()
     const [userDB, setUserDB] = useState<IUser>();
     const [task, setTask] = useState<ITask>();
+    const [loading, setLoading] = useState<boolean>(false);
     const getTask = async () => {
         const {data} = await myAxios.get<ITask>(`/tasks/${id}`);
         setCurrentTask(data.users.sort((a, b)=> b.timeDecision - a.timeDecision))
@@ -32,17 +33,19 @@ const LeaderboardComponent = () => {
         getUser()
     }, [])
     const getUser = async () => {
+        setLoading(true)
         const {data} = await myAxios.get('/auth/me', {
             headers: {
                 Authorization: userState.token
             }
         })
+        setLoading(false)
         setUserDB(data)
     }
 
     return (
-        <>
-            {userDB?.completedTasks?.find(t => t.task._id == id) ?
+            !loading ?
+            (userDB?.completedTasks?.find(t => t.task._id == id) && !loading ?
                 <>
                     <Typography fontSize={22} fontWeight={700}>{task?.name}</Typography>
                     <Typography color={'primary'} fontSize={18}>Вы на {currentTask?.length ? currentTask?.findIndex((user) => user.user._id == userDB?._id)+1 : 0} месте</Typography>
@@ -50,10 +53,10 @@ const LeaderboardComponent = () => {
                         {currentTask?.map((user, index) => <UserBlock key={user.user._id} user={user} rating={index+1}/>)}
                     </Box>
                 </> :
-                <Typography mt={5} textAlign={'center'} fontSize={22} fontWeight={700}>Сначала пройдите задачу</Typography>
-            }
-
-        </>
+                <Typography mt={5} textAlign={'center'} fontSize={22} fontWeight={700}>Сначала пройдите задачу</Typography>) :
+            <Box display={'flex'} height={'100%'} justifyContent={'center'} alignItems={'center'}>
+                <CircularProgress size={60}/>
+            </Box>
     );
 };
 
