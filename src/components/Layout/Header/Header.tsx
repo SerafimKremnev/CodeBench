@@ -72,14 +72,14 @@ const Header = observer(() => {
                         </Box>
                     </Modal>
                 </Box>:
-                <Box>
+                <Box className={styles.buttons}>
                     <Link to={'/auth'}>
                         <Button variant={'contained'} size={'small'}>
                             Войти
                         </Button>
                     </Link>
                     <Link to={'/register'}>
-                        <Button sx={{marginLeft: 2}} variant={'outlined'} size={'small'}>
+                        <Button variant={'outlined'} size={'small'}>
                             Регистрация
                         </Button>
                     </Link>

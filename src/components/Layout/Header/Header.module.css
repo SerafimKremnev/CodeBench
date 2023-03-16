@@ -5,9 +5,20 @@
     font-size: 18px;
     font-weight: 600;
 }
-
+.buttons {
+    display: flex;
+    gap: 10px;
+}
 @media (max-width: 500px) {
     .logo {
         display: none;
+    }
+    .link {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    .buttons {
+        flex-wrap: wrap;
+        justify-content: end;
     }
 }
