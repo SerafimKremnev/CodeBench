@@ -1,5 +1,5 @@
 import React, {DetailedHTMLProps, HTMLAttributes} from 'react';
-import styles from "../../../pages/TaskPage/TaskPage.module.css";
+import styles from "../../../pages/TaskPage.module.css";
 import Editor from "@monaco-editor/react";
 import {Box} from "@mui/material";
 

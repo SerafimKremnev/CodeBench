@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import styles from './TaskPage.module.css';
-import tasks from '../../store/TasksState';
+import tasks from '../store/TasksState';
 import {observer} from "mobx-react-lite";
-import Buttons from "../../components/TaskFolder/page/Buttons";
-import EditorBox from "../../components/TaskFolder/page/EditorBox";
-import TaskName from "../../components/TaskFolder/page/TaskName";
-import ConsoleBox from "../../components/TaskFolder/page/ConsoleBox";
-import myAxios from "../../myAxios";
-import {ITaskFinally} from "../../components/TaskFolder/TaskList/TaskList";
+import Buttons from "../components/TaskFolder/page/Buttons";
+import EditorBox from "../components/TaskFolder/page/EditorBox";
+import TaskName from "../components/TaskFolder/page/TaskName";
+import ConsoleBox from "../components/TaskFolder/page/ConsoleBox";
+import myAxios from "../myAxios";
+import {ITaskFinally} from "../components/TaskFolder/TaskList/TaskList";
 import axios, {AxiosError} from "axios";
-import userState, {IUser} from "../../store/UserState";
+import userState, {IUser} from "../store/UserState";
 import {Box, CircularProgress} from "@mui/material";
 
 interface IMessage {
