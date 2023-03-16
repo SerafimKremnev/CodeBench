@@ -31,7 +31,7 @@ const Sidebar = observer(({className}:SideBarProps) => {
                     type='button'
                     onClick={() => {
                         for (let i = 0; i < BenchState.getFields().length; i++) {
-                            let item = BenchState.getFields()[i].name;
+                            let item = BenchState.getFields()[i].id;
                             const button = document.getElementById(`${item}`);
                             button?.click();
                         }

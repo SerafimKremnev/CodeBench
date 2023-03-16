@@ -33,7 +33,7 @@ class Benches {
 
   addField() {
     this.benches.push({
-      id: Math.random().toString(),
+      id: String(Date.now()),
       name: `Поле ${this.benches.length + 1}`,
       score: 0,
       code: "for (let i = 0; i < 10000000; i++);",

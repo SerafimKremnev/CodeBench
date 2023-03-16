@@ -132,7 +132,7 @@ const CodeBlock = observer(({ name, index }: ICodeBlock) => {
               </Button>
             ) : (
               <Button
-                id={NameState.benches[index]}
+                id={BenchState.benches[index].id}
                 onClick={(e) => {
                   e.preventDefault();
                   bench();
