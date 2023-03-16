@@ -7,13 +7,11 @@ import {
   Box,
   Button,
   CircularProgress,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import BenchState from "../../store/BenchState";
 import EditorWindow from "../EditorWindow";
+import NameState from "../../store/NameState";
 
 interface ICodeBlock {
   name: string;
@@ -54,7 +52,7 @@ const CodeBlock = observer(({ name, index }: ICodeBlock) => {
     myWorker.onmessage = (m) => {
       setResultTime(m.data);
       BenchState.setScore(index, m.data);
-
+      // BenchState.renameField(index, codeName); TODO
       setIsLoading(false);
     };
     myWorker.onerror = (event) => {
@@ -64,68 +62,60 @@ const CodeBlock = observer(({ name, index }: ICodeBlock) => {
   };
 
   return (
-    <Box sx={{ width: "49%", mb: 2 }}>
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMore />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
-          sx={{ backgroundColor: "#333 !important" }}
-        >
-          <TextField
-            value={codeName}
-            sx={{
-              input: { color: "#fff" },
-              mb: 1,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            onChange={(e) => {
-              setCodeName(e.target.value);
-            }}
-            onBlur={() => {
-              if (!codeName) setCodeName("Имя решения");
-            }}
-            size='small'
-            id='outlined-basic'
-            label='Имя поля'
-            variant='outlined'
-            focused
-          />
-        </AccordionSummary>
-
-        <AccordionDetails sx={{ backgroundColor: "#333" }}>
-          <EditorWindow code={code} setCode={setCode} />
-
-          <Box>
-            <Box sx={{ mb: 1 }}>
-              {errorMessage ? (
-                <Typography
-                  variant='subtitle1'
-                  component='p'
-                  color='error'
-                  sx={{ width: "100%" }}
-                >
-                  {errorMessage}
-                </Typography>
-              ) : (
-                <Typography
-                  variant='subtitle1'
-                  component='p'
-                  color='primary'
-                  sx={{ mr: 1 }}
-                >
-                  Время выполнения:
-                  {loading ? (
-                    <CircularProgress sx={{ ml: 1 }} size={15} />
-                  ) : (
-                    ` ${resultTime}  ms`
-                  )}
-                </Typography>
-              )}
-            </Box>
-
+    <Box p={2} bgcolor={'#333'} display={'grid'}>
+      <TextField
+        value={codeName}
+        sx={{
+          input: { color: "#fff" },
+          mb: 1,
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        onChange={(e) => {
+          setCodeName(e.target.value);
+          NameState.rename(index, e.target.value)
+        }}
+        onBlur={() => {
+          if (!codeName) {
+            setCodeName("Имя решения");
+            NameState.rename(index, "Имя решения")
+          }
+        }}
+        size='small'
+        id='outlined-basic'
+        label='Имя поля'
+        variant='outlined'
+        focused
+      />
+      <EditorWindow height={200} code={code} setCode={setCode} />
+      <Box >
+          <Box sx={{ mb: 1 }}>
+            {errorMessage ? (
+              <Typography
+                variant='subtitle1'
+                component='p'
+                color='error'
+                sx={{ width: "100%" }}
+              >
+                {errorMessage}
+              </Typography>
+            ) : (
+              <Typography
+                variant='subtitle1'
+                component='p'
+                color='primary'
+                sx={{ mr: 1 }}
+              >
+                {loading ? (
+                  <CircularProgress sx={{ ml: 1 }} size={15} />
+                ) : (
+                  ` ${resultTime}  раз выполнился скрипт за одну секунду`
+                )}
+              </Typography>
+            )}
+          </Box>
+            <Box display={'flex'} gap={2} flexWrap={'wrap'}>
             {loading ? (
               <Button
                 type='button'
@@ -142,7 +132,7 @@ const CodeBlock = observer(({ name, index }: ICodeBlock) => {
               </Button>
             ) : (
               <Button
-                id={name}
+                id={NameState.benches[index]}
                 onClick={(e) => {
                   e.preventDefault();
                   bench();
@@ -152,13 +142,14 @@ const CodeBlock = observer(({ name, index }: ICodeBlock) => {
                 endIcon={<Send fontSize='small' />}
               >
                 Выполнить отдельно
+
               </Button>
             )}
             <Button
-              sx={{ ml: 1 }}
               onClick={(e) => {
                 e.preventDefault();
                 BenchState.deleteField(index);
+                NameState.deleteName(index)
               }}
               size='small'
               variant='contained'
@@ -168,8 +159,7 @@ const CodeBlock = observer(({ name, index }: ICodeBlock) => {
               Удалить поле
             </Button>
           </Box>
-        </AccordionDetails>
-      </Accordion>
+        </Box>
     </Box>
   );
 });

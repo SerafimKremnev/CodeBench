@@ -1,0 +1,53 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        'rating login'
+        '. decision'
+        '. score'
+    ;
+    gap: 10px;
+    background: #2c2c2c;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+
+
+.score {
+    grid-area: score;
+}
+
+.login {
+    grid-area: login;
+}
+
+.decision {
+    grid-area: decision;
+}
+.rating {
+    padding: 0 12px;
+    color: #1976d2;
+    border-radius: 50%;
+}
+@media (max-width: 500px) {
+    .wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+        'rating'
+        'login'
+        'decision'
+        'score'
+    ;
+        gap: 10px;
+        background: #2c2c2c;
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+    .rating {
+        grid-area: rating;
+        padding: 0 12px;
+        border-radius: 50%;
+    }
+}

@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
-import Editor from "@monaco-editor/react";
+import Editor, {EditorProps} from "@monaco-editor/react";
 import { observer } from "mobx-react-lite";
 
-interface ICodeBlock {
+interface ICodeBlock extends EditorProps{
   code: string;
   setCode: (value: string) => void;
 }
 
-const EditorWindow = observer(({ code, setCode }: ICodeBlock) => {
+const EditorWindow = observer(({ code, setCode, ...props}: ICodeBlock) => {
   return (
     <Box sx={{ borderRadius: 2, overflow: "hidden" }}>
       <Editor
@@ -26,6 +26,7 @@ const EditorWindow = observer(({ code, setCode }: ICodeBlock) => {
           setCode(value || "");
         }}
         theme='vs-dark'
+        {...props}
       />
     </Box>
   );

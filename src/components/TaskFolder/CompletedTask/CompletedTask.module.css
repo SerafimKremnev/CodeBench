@@ -1,0 +1,16 @@
+.wrapper {
+    justify-self: stretch;
+    padding: 20px 30px;
+    background: #2c2c2c;
+    border-radius: 10px;
+    display: grid;
+    gap: 10px;
+}
+
+.name:hover p {
+    color: red
+}
+
+.name p {
+    transition: all .2s;
+}

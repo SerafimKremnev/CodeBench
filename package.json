@@ -14,10 +14,14 @@
     "@monaco-editor/react": "^4.4.6",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.10",
+    "axios": "^1.3.4",
+    "classnames": "^2.3.2",
     "mobx": "^6.8.0",
     "mobx-react-lite": "^3.4.0",
     "react": "^18.2.0",
+    "react-code-blocks": "^0.0.9-0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.5",
     "react-router-dom": "^6.8.1"
   },
   "devDependencies": {

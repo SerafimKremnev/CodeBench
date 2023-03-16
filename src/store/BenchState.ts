@@ -27,9 +27,10 @@ class Benches {
     makeAutoObservable(this);
   }
 
-  renameField(index: number, name: string) {
-    this.benches[index].name = name;
-  }
+  // renameField(index: number, name: string) {
+  //   this.benches[index].name = name;
+  // }
+
   addField() {
     this.benches.push({
       id: Math.random().toString(),

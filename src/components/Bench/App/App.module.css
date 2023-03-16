@@ -1,0 +1,53 @@
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr;
+    gap: 20px;
+
+}
+
+.sidebar {
+
+}
+
+.body {
+    padding: 0 20px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-content: start;
+    max-height: 86vh;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+.body::-webkit-scrollbar {
+    width: 7px;               /* ширина scrollbar */
+}
+.body::-webkit-scrollbar-track {
+    background: #222;        /* цвет дорожки */
+}
+.body::-webkit-scrollbar-thumb {
+    background-color: #333;    /* цвет плашки */
+    border-radius: 20px;       /* закругления плашки */
+    border: 3px solid #333;  /* padding вокруг плашки */
+}
+
+@media (max-width: 1100px) {
+    .wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .body {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 800px) {
+    .wrapper {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}

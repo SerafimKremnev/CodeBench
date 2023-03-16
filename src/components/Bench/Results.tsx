@@ -8,6 +8,8 @@ import {
   TableRow,
   Paper,
 } from "@mui/material";
+import {DetailedHTMLProps, HTMLAttributes} from "react";
+import NameState from "../../store/NameState";
 
 function createData(name: string, score: number) {
   return { name, score };
@@ -21,10 +23,13 @@ const rows = [
   createData("Gingerbread", 356),
 ];
 
-const Results = observer(() => {
+interface ResultsProps extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+
+}
+const Results = observer(({className}:ResultsProps) => {
   return (
-    <Paper sx={{ backgroundColor: "#1c1c1c" }}>
-      <Table sx={{ minWidth: 650 }} aria-label='simple table'>
+    <Paper className={className} sx={{ backgroundColor: "#1c1c1c", mt: '30px', maxHeight: '78vh', overflow: 'auto' }}>
+      <Table aria-label='simple table'>
         <TableHead>
           <TableRow>
             <TableCell sx={{ color: "#fff" }}>Имя поля</TableCell>
@@ -34,13 +39,13 @@ const Results = observer(() => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {BenchState.getFields().map((result) => (
+          {BenchState.getFields().map((result, index) => (
             <TableRow
               key={result.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component='th' scope='row' sx={{ color: "#fff" }}>
-                {result.name}
+                {NameState.benches[index]}
               </TableCell>
               <TableCell sx={{ color: "#fff" }} align='right'>
                 {result.score}

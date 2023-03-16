@@ -4,7 +4,7 @@ interface ConsoleBoxProps {
     description: string | undefined,
     classNameButtons: string,
     classNameDesc: string,
-    message: { result: string, score: number },
+    message: { message: string, score: number },
     errorMessage: string
     console: boolean,
     setConsole: (isOpen: boolean) => void
@@ -34,14 +34,14 @@ const ConsoleBox = ({description, classNameButtons, classNameDesc, message, erro
                     color='gray'
                     sx={{ mr: 1 }}
                 >
-                    {message.result ?
+                    {message.message ?
                         <>
                             <Typography
                                 variant='subtitle1'
                                 component='p'
                                 color='green'
                                 sx={{ mr: 1 }}>
-                                    {message.result}
+                                    {message.message}
                             </Typography>
                             <Typography
                                 variant='subtitle1'
@@ -49,7 +49,7 @@ const ConsoleBox = ({description, classNameButtons, classNameDesc, message, erro
                                 color='green'
                                 fontSize={'15px'}
                                 sx={{ mr: 1 }}>
-                                    Время выполнения скрипта c высокими значениями: {message.score} ms
+                                    Очки цикла: {message.score}
                             </Typography>
                         </> :
                         <Typography

@@ -1,5 +1,13 @@
 .logo {
-    color: #ffffff;
-    font-size: 28px;
-    font-style: italic;
+    display: flex;
+}
+.link {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+@media (max-width: 500px) {
+    .logo {
+        display: none;
+    }
 }

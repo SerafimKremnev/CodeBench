@@ -32,3 +32,21 @@
 .buttons {
     grid-area: buttons;
 }
+
+@media (max-width: 600px) {
+    .taskPage {
+        padding: 20px 0 0 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+        "name"
+        "group"
+        "desc"
+        "editor"
+        "buttons"
+    ;
+        grid-template-rows: auto auto 1fr 2fr auto;
+        height: 100%;
+        gap: 15px;
+    }
+}
