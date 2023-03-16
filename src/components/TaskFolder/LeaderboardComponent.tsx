@@ -44,19 +44,19 @@ const LeaderboardComponent = () => {
     }
 
     return (
-            !loading ?
-            (userDB?.completedTasks?.find(t => t.task._id == id) && !loading ?
-                <>
-                    <Typography fontSize={22} fontWeight={700}>{task?.name}</Typography>
-                    <Typography color={'primary'} fontSize={18}>Вы на {currentTask?.length ? currentTask?.findIndex((user) => user.user._id == userDB?._id)+1 : 0} месте</Typography>
-                    <Box display={'grid'} mt={2} gridTemplateColumns={'1fr'} gap={2}>
-                        {currentTask?.map((user, index) => <UserBlock key={user.user._id} user={user} rating={index+1}/>)}
-                    </Box>
-                </> :
-                <Typography mt={5} textAlign={'center'} fontSize={22} fontWeight={700}>Сначала пройдите задачу</Typography>) :
+            loading ?
             <Box display={'flex'} height={'100%'} justifyContent={'center'} alignItems={'center'}>
                 <CircularProgress size={60}/>
-            </Box>
+            </Box> :
+                (userDB?.completedTasks?.find(t => t.task._id == id) && !loading ?
+                    <>
+                        <Typography fontSize={22} fontWeight={700}>{task?.name}</Typography>
+                        <Typography color={'primary'} fontSize={18}>Вы на {currentTask?.length ? currentTask?.findIndex((user) => user.user._id == userDB?._id)+1 : 0} месте</Typography>
+                        <Box display={'grid'} mt={2} gridTemplateColumns={'1fr'} gap={2}>
+                            {currentTask?.map((user, index) => <UserBlock key={user.user._id} user={user} rating={index+1}/>)}
+                        </Box>
+                    </> :
+                    <Typography mt={5} textAlign={'center'} fontSize={22} fontWeight={700}>Сначала пройдите задачу</Typography>)
     );
 };
 
